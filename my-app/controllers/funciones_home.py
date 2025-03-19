@@ -256,6 +256,7 @@ def procesar_actualizacion_form(data):
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as cursor:
                 # Extraer y procesar datos del formulario
+                id_empleado = data.form['id_empleado']
                 nombre_empleado = data.form['nombre_empleado']
                 apellido_empleado = data.form['apellido_empleado']
                 sexo_empleado = data.form['sexo_empleado']
