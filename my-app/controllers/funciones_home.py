@@ -106,8 +106,9 @@ def sql_detalles_empleadosBD(idEmpleado):
                         e.nombre_empleado, 
                         e.apellido_empleado,
                         CASE
-                            WHEN e.sexo_empleado = 1 THEN 'Masculino'
-                            ELSE 'Femenino'
+                        WHEN e.sexo_empleado = 1 
+                        THEN 'Masculino'
+                        ELSE 'Femenino'
                         END AS sexo_empleado,
                         e.telefono_empleado, 
                         e.email_empleado,
