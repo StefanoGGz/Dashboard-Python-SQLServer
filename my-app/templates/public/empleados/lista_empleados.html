@@ -36,7 +36,6 @@
               <th>Nombre</th>
               <th>Apellido</th>
               <th>Sexo</th>
-              <th>Salario</th>
               <th>Acción</th>
             </tr>
           </thead>
@@ -47,10 +46,6 @@
               <td>{{ empleado.nombre_empleado }}</td>
               <td>{{ empleado.apellido_empleado }}</td>
               <td>{{ empleado.sexo_empleado }}</td>
-              <td>
-                $ {{ '{:,.0f}'.format(empleado.salario_empleado).replace(',',
-                '.')}}
-              </td>
               <td width="10px">
                 <a
                   href="/detalles-empleado/{{ empleado.id_empleado }}"

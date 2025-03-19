@@ -1,4 +1,3 @@
-
 # Para subir archivo tipo foto al servidor
 from werkzeug.utils import secure_filename
 import uuid  # Modulo de python para crear un string
@@ -9,7 +8,7 @@ import datetime
 import re
 import os
 
-from os import remove  # Modulo  para remover archivo
+from os import remove  # Modulo para remover archivo
 from os import path  # Modulo para obtener la ruta o directorio
 
 
@@ -19,21 +18,16 @@ from flask import send_file
 
 
 def procesar_form_empleado(dataForm, foto_perfil):
-    # Formateando Salario
-    salario_sin_puntos = re.sub('[^0-9]+', '', dataForm['salario_empleado'])
-    # convertir salario a INT
-    salario_entero = int(salario_sin_puntos)
-
     result_foto_perfil = procesar_imagen_perfil(foto_perfil)
     try:
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as cursor:
 
-                sql = "INSERT INTO tbl_empleados (nombre_empleado, apellido_empleado, sexo_empleado, telefono_empleado, email_empleado, profesion_empleado, foto_empleado, salario_empleado) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO tbl_empleados (nombre_empleado, apellido_empleado, sexo_empleado, telefono_empleado, email_empleado, profesion_empleado, foto_empleado) VALUES (%s, %s, %s, %s, %s, %s, %s)"
 
                 # Creando una tupla con los valores del INSERT
                 valores = (dataForm['nombre_empleado'], dataForm['apellido_empleado'], dataForm['sexo_empleado'],
-                           dataForm['telefono_empleado'], dataForm['email_empleado'], dataForm['profesion_empleado'], result_foto_perfil, salario_entero)
+                           dataForm['telefono_empleado'], dataForm['email_empleado'], dataForm['profesion_empleado'], result_foto_perfil)
                 cursor.execute(sql, valores)
 
                 conexion_MySQLdb.commit()
@@ -85,7 +79,6 @@ def sql_lista_empleadosBD():
                         e.id_empleado,
                         e.nombre_empleado, 
                         e.apellido_empleado,
-                        e.salario_empleado,
                         e.foto_empleado,
                         CASE
                             WHEN e.sexo_empleado = 1 THEN 'Masculino'
@@ -94,12 +87,11 @@ def sql_lista_empleadosBD():
                     FROM tbl_empleados AS e
                     ORDER BY e.id_empleado DESC
                     """)
-                cursor.execute(querySQL,)
+                cursor.execute(querySQL, )
                 empleadosBD = cursor.fetchall()
         return empleadosBD
     except Exception as e:
-        print(
-            f"Errro en la función sql_lista_empleadosBD: {e}")
+        print(f"Errro en la función sql_lista_empleadosBD: {e}")
         return None
 
 
@@ -113,7 +105,6 @@ def sql_detalles_empleadosBD(idEmpleado):
                         e.id_empleado,
                         e.nombre_empleado, 
                         e.apellido_empleado,
-                        e.salario_empleado,
                         CASE
                             WHEN e.sexo_empleado = 1 THEN 'Masculino'
                             ELSE 'Femenino'
@@ -131,8 +122,7 @@ def sql_detalles_empleadosBD(idEmpleado):
                 empleadosBD = cursor.fetchone()
         return empleadosBD
     except Exception as e:
-        print(
-            f"Errro en la función sql_detalles_empleadosBD: {e}")
+        print(f"Errro en la función sql_detalles_empleadosBD: {e}")
         return None
 
 
@@ -146,7 +136,6 @@ def empleadosReporte():
                         e.id_empleado,
                         e.nombre_empleado, 
                         e.apellido_empleado,
-                        e.salario_empleado,
                         e.email_empleado,
                         e.telefono_empleado,
                         e.profesion_empleado,
@@ -158,12 +147,11 @@ def empleadosReporte():
                     FROM tbl_empleados AS e
                     ORDER BY e.id_empleado DESC
                     """)
-                cursor.execute(querySQL,)
+                cursor.execute(querySQL, )
                 empleadosBD = cursor.fetchall()
         return empleadosBD
     except Exception as e:
-        print(
-            f"Errro en la función empleadosReporte: {e}")
+        print(f"Errro en la función empleadosReporte: {e}")
         return None
 
 
@@ -174,12 +162,9 @@ def generarReporteExcel():
 
     # Agregar la fila de encabezado con los títulos
     cabeceraExcel = ("Nombre", "Apellido", "Sexo",
-                     "Telefono", "Email", "Profesión", "Salario", "Fecha de Ingreso")
+                     "Telefono", "Email", "Profesión", "Fecha de Ingreso")
 
     hoja.append(cabeceraExcel)
-
-    # Formato para números en moneda colombiana y sin decimales
-    formato_moneda_colombiana = '#,##0'
 
     # Agregar los registros a la hoja
     for registro in dataEmpleados:
@@ -189,18 +174,11 @@ def generarReporteExcel():
         telefono_empleado = registro['telefono_empleado']
         email_empleado = registro['email_empleado']
         profesion_empleado = registro['profesion_empleado']
-        salario_empleado = registro['salario_empleado']
         fecha_registro = registro['fecha_registro']
 
         # Agregar los valores a la hoja
         hoja.append((nombre_empleado, apellido_empleado, sexo_empleado, telefono_empleado, email_empleado, profesion_empleado,
-                     salario_empleado, fecha_registro))
-
-        # Itera a través de las filas y aplica el formato a la columna G
-        for fila_num in range(2, hoja.max_row + 1):
-            columna = 7  # Columna G
-            celda = hoja.cell(row=fila_num, column=columna)
-            celda.number_format = formato_moneda_colombiana
+                    fecha_registro))
 
     fecha_actual = datetime.datetime.now()
     archivoExcel = f"Reporte_empleados_{fecha_actual.strftime('%Y_%m_%d')}.xlsx"
@@ -229,7 +207,6 @@ def buscarEmpleadoBD(search):
                             e.id_empleado,
                             e.nombre_empleado, 
                             e.apellido_empleado,
-                            e.salario_empleado,
                             CASE
                                 WHEN e.sexo_empleado = 1 THEN 'Masculino'
                                 ELSE 'Femenino'
@@ -261,7 +238,6 @@ def buscarEmpleadoUnico(id):
                             e.telefono_empleado,
                             e.email_empleado,
                             e.profesion_empleado,
-                            e.salario_empleado,
                             e.foto_empleado
                         FROM tbl_empleados AS e
                         WHERE e.id_empleado =%s LIMIT 1
@@ -287,10 +263,6 @@ def procesar_actualizacion_form(data):
                 email_empleado = data.form['email_empleado']
                 profesion_empleado = data.form['profesion_empleado']
 
-                # Procesar salario eliminando caracteres no numéricos
-                salario_sin_puntos = re.sub('[^0-9]+', '', data.form['salario_empleado'])
-                salario_empleado = int(salario_sin_puntos)
-                id_empleado = data.form['id_empleado']
 
                 # Construir consulta SQL y parámetros dinámicamente
                 query_base = """
@@ -302,11 +274,10 @@ def procesar_actualizacion_form(data):
                         telefono_empleado = %s,
                         email_empleado = %s,
                         profesion_empleado = %s,
-                        salario_empleado = %s
                 """
                 params = [
                     nombre_empleado, apellido_empleado, sexo_empleado,
-                    telefono_empleado, email_empleado, profesion_empleado, salario_empleado
+                    telefono_empleado, email_empleado, profesion_empleado,
                 ]
 
                 # Verificar si se subió un archivo de foto
@@ -336,7 +307,7 @@ def lista_usuariosBD():
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as cursor:
                 querySQL = "SELECT id, name_surname, email_user, created_user FROM users"
-                cursor.execute(querySQL,)
+                cursor.execute(querySQL, )
                 usuariosBD = cursor.fetchall()
         return usuariosBD
     except Exception as e:
