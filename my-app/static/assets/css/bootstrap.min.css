@@ -84,6 +84,8 @@ sub {
 }
 img {
   border: 0;
+  max-width: 50%; /* Cambiado al 50% */
+  height: auto;
 }
 svg:not(:root) {
   overflow: hidden;
@@ -228,7 +230,7 @@ th {
     page-break-inside: avoid;
   }
   img {
-    max-width: 100% !important;
+    max-width: 50% !important;
   }
   h2,
   h3,
@@ -1121,21 +1123,21 @@ figure {
 img {
   vertical-align: middle;
 }
+img, 
 .carousel-inner > .item > a > img,
 .carousel-inner > .item > img,
 .img-responsive,
 .thumbnail a > img,
 .thumbnail > img {
-  display: block;
-  max-width: 100%;
-  height: auto;
+  max-width: 50% !important; /* Fuerza el tamaño al 50% */
+  height: auto !important;   /* Mantiene la proporción */
 }
 .img-rounded {
   border-radius: 6px;
 }
 .img-thumbnail {
   display: inline-block;
-  max-width: 100%;
+  max-width: 50%;
   height: auto;
   padding: 4px;
   line-height: 1.42857143;
@@ -3673,7 +3675,7 @@ tbody.collapse.in {
 .dropdown-menu > .active > a:hover {
   color: #fff;
   text-decoration: none;
-  background-color: #08b324;
+  background-color: #e4550b;
   outline: 0;
 }
 .dropdown-menu > .disabled > a,

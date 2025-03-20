@@ -33,8 +33,8 @@ Para ejecutar este proyecto, necesitas:
 
    ```bash
    python -m venv env
-   source env/bin/activate       # En Linux/Mac
    env\Scripts\activate         # En Windows
+   source env/bin/activate       # En Linux/Mac
    ```
 
 5. **Instala las dependencias:**

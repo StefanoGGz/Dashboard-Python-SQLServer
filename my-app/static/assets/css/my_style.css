@@ -92,7 +92,7 @@ body {
 }
 
 .bx-menu {
-  background-color: #08b324 !important;
+  background-color: #e4550b !important;
   color: #fff;
   padding: 10px 10px;
   border-radius: 50%;
@@ -188,7 +188,7 @@ tbody tr:hover {
 }
 
 .menu-vertical .menu-item.active:not(.open) > .menu-link {
-  font-size: 14px !important;
+  font-size: 18px !important;
 }
 
 .alert-success {
